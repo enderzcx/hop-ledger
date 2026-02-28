@@ -80,6 +80,7 @@ Runbooks:
 - `docs/openclaw-handoff-quickstart.md`
 - `docs/openclaw-blind-handoff-scorecard.md`
 - `docs/rollback-sop.md`
+- `docs/migration-agentrail-v1-to-v1x.md`
 
 Pilot runner (writes artifacts + verifies run):
 
