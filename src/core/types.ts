@@ -2,6 +2,8 @@ export type AgentRailKind = "task-envelope" | "task-ack" | "task-phase" | "task-
 
 export type AgentRailChannel = "dm" | "group" | "api";
 
+export type AgentRailProtocolVersion = "agentrail-v1" | `agentrail-v1.${number}`;
+
 export interface AgentRailPaymentBinding {
   mode: "x402" | "mock" | "none";
   requestId: string;
@@ -23,7 +25,7 @@ export interface AgentRailReceiptRef {
 }
 
 export interface AgentRailEnvelope<TPayload = unknown> {
-  protocolVersion: "agentrail-v1";
+  protocolVersion: AgentRailProtocolVersion;
   kind: AgentRailKind;
   traceId: string;
   requestId: string;

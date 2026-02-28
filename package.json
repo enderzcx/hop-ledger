@@ -1,11 +1,16 @@
 {
   "name": "hop-ledger",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
+  "bin": {
+    "hop-verifier": "./dist/src/cli/verifier.js"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "verify:envelope": "node dist/src/cli/verifier.js verify-envelope",
+    "verify:run": "node dist/src/cli/verifier.js verify-run"
   },
   "devDependencies": {
     "@types/node": "^24.4.0",
