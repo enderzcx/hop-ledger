@@ -11,6 +11,24 @@ HopLedger is the AgentRail protocol layer for auditable agent-to-agent and agent
 - Protocol layer: AgentRail
 - Goal: verifiable execution with trace-linked payment and result evidence
 
+## Update Checklist
+When you ask to "update", we must check both documentation and knowledge sync in the same round.
+
+1. Notion sync check (required):
+- Knowledge Hub index freshness and links
+- HopLedger Plan status board
+- AA-v2 Knowledge impact notes (if session/pay/AA behavior changed)
+- Dev Log - Ongoing entry (date, commits, verification, blockers, next actions)
+
+2. README sync check (required):
+- New scripts/commands reflected in README
+- New runbooks/docs linked in README
+- Current validation commands and latest artifact path updated when relevant
+
+3. Output discipline (required):
+- Report what was updated in Notion and README
+- Report blockers explicitly when Notion write is unavailable
+
 ## Directory
 - `specs/` protocol and API contracts
 - `adapters/openclaw/` OpenClaw integration notes
