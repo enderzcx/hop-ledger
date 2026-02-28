@@ -89,3 +89,9 @@ npm run build
 node dist/src/cli/verifier.js verify-envelope --file fixtures/contracts/task-envelope.fixture.json
 node dist/src/cli/verifier.js verify-run --file fixtures/contracts/run.fixture.json
 ```
+
+## External Team Handoff
+
+- Quickstart: `docs/openclaw-handoff-quickstart.md`
+- Skill-mode env template: `docs/openclaw-skill.env.example`
+- Verifier API mode: `docs/verifier-api.md`

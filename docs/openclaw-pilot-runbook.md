@@ -46,6 +46,9 @@ Skill mode env vars:
 - `HOP_PILOT_SESSION_ID` (optional override for session pay)
 - `HOP_PILOT_PAY_ACTION` (default `reactive-stop-orders`)
 
+Template:
+- `docs/openclaw-skill.env.example`
+
 AgentRail mode env var:
 - `HOP_PILOT_ENDPOINT` (default `http://127.0.0.1:3001/agentrail`)
 

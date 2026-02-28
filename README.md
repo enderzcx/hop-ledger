@@ -30,6 +30,9 @@ HopLedger is the AgentRail protocol layer for auditable agent-to-agent and agent
 - Verifier CLI:
   - `verify-envelope`
   - `verify-run`
+- Verifier API mode:
+  - `POST /verify/envelope`
+  - `POST /verify/run`
 - Contract fixtures:
   - `fixtures/contracts/task-envelope.fixture.json`
   - `fixtures/contracts/task-result.fixture.json`
@@ -72,6 +75,8 @@ Runbooks:
 - `docs/conformance-acceptance.md`
 - `docs/digest-parity-kite-reference.md`
 - `docs/openclaw-pilot-runbook.md`
+- `docs/verifier-api.md`
+- `docs/openclaw-handoff-quickstart.md`
 - `docs/rollback-sop.md`
 
 Pilot runner (writes artifacts + verifies run):
@@ -90,6 +95,23 @@ npm run pilot:openclaw
 ```
 
 By default, skill mode auto-handles `402 payment_required` with `session pay -> proof submit`.
+
+Start verifier API service (local):
+
+```bash
+npm run verify:api
+```
+
+Default endpoint: `http://127.0.0.1:4411`
+
+Quick checks:
+
+```bash
+curl -sS http://127.0.0.1:4411/health
+curl -sS -X POST http://127.0.0.1:4411/verify/run \
+  -H "content-type: application/json" \
+  --data-binary @fixtures/contracts/run.fixture.json
+```
 
 Then implement your OpenClaw runtime against:
 - `createOpenClawAdapter().toTaskEnvelope(...)`
