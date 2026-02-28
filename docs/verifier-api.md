@@ -97,3 +97,13 @@ Response shape:
 - `413`: request body too large.
 
 Digest mismatch is returned as a normal `200` response with `verificationPassed: false`.
+
+## CI smoke
+
+```bash
+npm run smoke:verify-api
+```
+
+## Deployment sample
+
+- `docs/verifier-api-deploy.md`

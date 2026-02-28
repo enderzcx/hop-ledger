@@ -12,6 +12,7 @@
     "verify:envelope": "node dist/src/cli/verifier.js verify-envelope",
     "verify:run": "node dist/src/cli/verifier.js verify-run",
     "verify:api": "npm run build && node dist/src/api/verifier.js",
+    "smoke:verify-api": "npm run build && node scripts/verify-api-smoke.mjs",
     "preconformance": "npm run build",
     "conformance": "node scripts/conformance-check.mjs",
     "parity:kite": "node scripts/digest-parity-kite.mjs",
