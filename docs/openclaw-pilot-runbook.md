@@ -14,6 +14,37 @@ This runbook defines the first real endpoint pilot for HopLedger transport + x40
 - `hop-ledger` is built (`npm run build`).
 - Session payment path in main backend remains session-key-first.
 
+## Pilot Runner
+
+Command:
+
+```bash
+npm run pilot:openclaw
+```
+
+Modes (`HOP_PILOT_MODE`):
+- `mock` (default): local dry run, no external dependency.
+- `skill`: call KITE backend endpoint (`/api/skill/openclaw/invoke`) and map response to `task-result`.
+- `agentrail`: call direct AgentRail endpoint expecting `resultEnvelope`.
+
+Common env vars:
+- `HOP_PILOT_MODE`
+- `HOP_PILOT_API_KEY`
+- `HOP_PILOT_CAPABILITY`
+- `HOP_PILOT_SYMBOL`
+- `HOP_PILOT_TP`
+- `HOP_PILOT_SL`
+- `HOP_PILOT_QTY`
+
+Skill mode env vars:
+- `HOP_PILOT_SKILL_ENDPOINT` (default `http://127.0.0.1:3001/api/skill/openclaw/invoke`)
+- `HOP_PILOT_PAYER` (required in skill mode)
+- `HOP_PILOT_SOURCE_AGENT_ID` (default `1`)
+- `HOP_PILOT_TARGET_AGENT_ID` (default `2`)
+
+AgentRail mode env var:
+- `HOP_PILOT_ENDPOINT` (default `http://127.0.0.1:3001/agentrail`)
+
 ## Endpoint Contract
 
 ### Request
@@ -79,6 +110,13 @@ This runbook defines the first real endpoint pilot for HopLedger transport + x40
 6. Verify:
    - `node dist/src/cli/verifier.js verify-envelope --file <pilot-envelope.json>`
    - `node dist/src/cli/verifier.js verify-run --file <pilot-run.json>`
+
+Artifact output:
+- `artifacts/pilot/<timestamp>/task-envelope.json`
+- `artifacts/pilot/<timestamp>/task-result.json`
+- `artifacts/pilot/<timestamp>/run.json`
+- `artifacts/pilot/<timestamp>/verification.json`
+- `artifacts/pilot/<timestamp>/summary.json`
 
 ## Exit Criteria
 - Real endpoint response can be mapped into valid `task-result`.

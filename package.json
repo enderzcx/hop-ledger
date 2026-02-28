@@ -12,7 +12,8 @@
     "verify:envelope": "node dist/src/cli/verifier.js verify-envelope",
     "verify:run": "node dist/src/cli/verifier.js verify-run",
     "preconformance": "npm run build",
-    "conformance": "node scripts/conformance-check.mjs"
+    "conformance": "node scripts/conformance-check.mjs",
+    "pilot:openclaw": "npm run build && node scripts/openclaw-pilot-run.mjs"
   },
   "devDependencies": {
     "@types/node": "^24.4.0",

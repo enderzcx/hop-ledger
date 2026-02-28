@@ -67,6 +67,12 @@ Runbooks:
 - `docs/openclaw-pilot-runbook.md`
 - `docs/rollback-sop.md`
 
+Pilot runner (writes artifacts + verifies run):
+
+```bash
+npm run pilot:openclaw
+```
+
 Then implement your OpenClaw runtime against:
 - `createOpenClawAdapter().toTaskEnvelope(...)`
 - `createOpenClawAdapter().toTaskResult(...)`
