@@ -81,6 +81,8 @@ Runbooks:
 - `docs/openclaw-blind-handoff-scorecard.md`
 - `docs/rollback-sop.md`
 - `docs/migration-agentrail-v1-to-v1x.md`
+- `docs/pilot-stability-benchmark-2026-03-01.md`
+- `docs/verifier-api-container-check-2026-03-01.md`
 
 Pilot runner (writes artifacts + verifies run):
 
