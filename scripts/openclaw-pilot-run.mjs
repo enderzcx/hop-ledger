@@ -57,7 +57,55 @@ function extractTxHash(payload) {
   return "";
 }
 
-function createSkillTransport({ adapter, endpoint, apiKey, payer, sourceAgentId, targetAgentId }) {
+function isTruthy(value) {
+  return /^(1|true|yes|on)$/i.test(String(value || "").trim());
+}
+
+function buildRequestHeaders(apiKey) {
+  const headers = {
+    "content-type": "application/json"
+  };
+  if (apiKey) {
+    headers["x-api-key"] = apiKey;
+  }
+  return headers;
+}
+
+async function postJson(url, { headers, body, label }) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body)
+  });
+  const rawBody = await response.json().catch(() => ({}));
+  return { response, rawBody, label };
+}
+
+function extractChallenge(rawBody) {
+  const challenge = rawBody?.x402 && typeof rawBody.x402 === "object" ? rawBody.x402 : null;
+  const accept = Array.isArray(challenge?.accepts) ? challenge.accepts[0] : null;
+  const requestId = String(challenge?.requestId || "").trim();
+  const tokenAddress = String(accept?.tokenAddress || "").trim();
+  const recipient = String(accept?.recipient || "").trim();
+  const amount = String(accept?.amount || "").trim();
+  if (!requestId || !tokenAddress || !recipient || !amount) {
+    return null;
+  }
+  return { requestId, tokenAddress, recipient, amount };
+}
+
+function createSkillTransport({
+  adapter,
+  endpoint,
+  apiKey,
+  payer,
+  sourceAgentId,
+  targetAgentId,
+  autoPay,
+  payEndpoint,
+  action,
+  sessionId
+}) {
   if (!endpoint) {
     throw new Error("Skill mode requires HOP_PILOT_SKILL_ENDPOINT.");
   }
@@ -84,19 +132,80 @@ function createSkillTransport({ adapter, endpoint, apiKey, payer, sourceAgentId,
         task
       };
 
-      const headers = {
-        "content-type": "application/json"
-      };
-      if (apiKey) {
-        headers["x-api-key"] = apiKey;
+      const headers = buildRequestHeaders(apiKey);
+      let { response, rawBody } = await postJson(endpoint, {
+        headers,
+        body,
+        label: "skill-invoke"
+      });
+
+      if (response.status === 402 && autoPay) {
+        const challenge = extractChallenge(rawBody);
+        if (!challenge) {
+          throw new Error(
+            `Skill endpoint returned 402 but challenge payload is malformed: ${String(
+              rawBody?.reason || rawBody?.error || "unknown"
+            )}`
+          );
+        }
+
+        const payBody = {
+          tokenAddress: challenge.tokenAddress,
+          recipient: challenge.recipient,
+          amount: challenge.amount,
+          requestId: challenge.requestId,
+          action,
+          query: `A2A stop-order ${task.symbol} tp=${task.takeProfit} sl=${task.stopLoss}${
+            Number.isFinite(Number(task.quantity)) ? ` qty=${task.quantity}` : ""
+          }`,
+          ...(sessionId ? { sessionId } : {})
+        };
+        const { response: payResponse, rawBody: payRawBody } = await postJson(payEndpoint, {
+          headers,
+          body: payBody,
+          label: "session-pay"
+        });
+        if (!payResponse.ok || payRawBody?.ok === false) {
+          throw new Error(
+            `Session pay failed (${payResponse.status}): ${String(
+              payRawBody?.reason || payRawBody?.error || "unknown"
+            )}`
+          );
+        }
+        const txHash = String(payRawBody?.payment?.txHash || "").trim();
+        if (!/^0x[a-fA-F0-9]{64}$/.test(txHash)) {
+          throw new Error("Session pay returned invalid txHash.");
+        }
+
+        const proofBody = {
+          ...body,
+          requestId: challenge.requestId,
+          paymentProof: {
+            requestId: challenge.requestId,
+            txHash,
+            payer,
+            tokenAddress: challenge.tokenAddress,
+            recipient: challenge.recipient,
+            amount: challenge.amount
+          }
+        };
+
+        const proofResult = await postJson(endpoint, {
+          headers,
+          body: proofBody,
+          label: "skill-proof-submit"
+        });
+        response = proofResult.response;
+        rawBody = {
+          ...(proofResult.rawBody || {}),
+          pilot: {
+            autoPay: true,
+            challengeRequestId: challenge.requestId,
+            sessionPayTxHash: txHash
+          }
+        };
       }
 
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers,
-        body: JSON.stringify(body)
-      });
-      const rawBody = await response.json().catch(() => ({}));
       if (!response.ok || rawBody?.ok === false) {
         throw new Error(
           `Skill endpoint failed (${response.status}): ${String(rawBody?.reason || rawBody?.error || "unknown")}`
@@ -174,8 +283,13 @@ async function main() {
   const mode = readEnv("HOP_PILOT_MODE", "mock").toLowerCase();
   const endpoint = readEnv("HOP_PILOT_ENDPOINT", "http://127.0.0.1:3001/agentrail");
   const skillEndpoint = readEnv("HOP_PILOT_SKILL_ENDPOINT", "http://127.0.0.1:3001/api/skill/openclaw/invoke");
+  const skillBaseOrigin = new URL(skillEndpoint).origin;
+  const payEndpoint = readEnv("HOP_PILOT_PAY_ENDPOINT", `${skillBaseOrigin}/api/session/pay`);
   const apiKey = readEnv("HOP_PILOT_API_KEY");
   const payer = readEnv("HOP_PILOT_PAYER");
+  const sessionId = readEnv("HOP_PILOT_SESSION_ID");
+  const action = readEnv("HOP_PILOT_PAY_ACTION", "reactive-stop-orders");
+  const autoPay = isTruthy(readEnv("HOP_PILOT_AUTO_PAY", "1"));
   const sourceAgentId = readEnv("HOP_PILOT_SOURCE_AGENT_ID", "1");
   const targetAgentId = readEnv("HOP_PILOT_TARGET_AGENT_ID", "2");
   const capability = readEnv("HOP_PILOT_CAPABILITY", "reactive-stop-orders");
@@ -221,7 +335,11 @@ async function main() {
       apiKey,
       payer,
       sourceAgentId,
-      targetAgentId
+      targetAgentId,
+      autoPay,
+      payEndpoint,
+      action,
+      sessionId
     });
   } else {
     transport = createMockEnvelopeTransport({

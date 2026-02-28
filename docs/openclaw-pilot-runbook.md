@@ -38,9 +38,13 @@ Common env vars:
 
 Skill mode env vars:
 - `HOP_PILOT_SKILL_ENDPOINT` (default `http://127.0.0.1:3001/api/skill/openclaw/invoke`)
-- `HOP_PILOT_PAYER` (required in skill mode)
+- `HOP_PILOT_PAYER` (required in skill mode; use AA wallet address for strict proof match)
 - `HOP_PILOT_SOURCE_AGENT_ID` (default `1`)
 - `HOP_PILOT_TARGET_AGENT_ID` (default `2`)
+- `HOP_PILOT_AUTO_PAY` (default `1`; auto run `challenge -> session pay -> proof submit`)
+- `HOP_PILOT_PAY_ENDPOINT` (default `<skill-origin>/api/session/pay`)
+- `HOP_PILOT_SESSION_ID` (optional override for session pay)
+- `HOP_PILOT_PAY_ACTION` (default `reactive-stop-orders`)
 
 AgentRail mode env var:
 - `HOP_PILOT_ENDPOINT` (default `http://127.0.0.1:3001/agentrail`)
@@ -110,6 +114,11 @@ AgentRail mode env var:
 6. Verify:
    - `node dist/src/cli/verifier.js verify-envelope --file <pilot-envelope.json>`
    - `node dist/src/cli/verifier.js verify-run --file <pilot-run.json>`
+
+Skill mode payment flow (auto):
+1. POST skill invoke without proof and read `402 payment_required`.
+2. Call `/api/session/pay` using challenge `requestId/token/recipient/amount`.
+3. Submit `paymentProof` to skill invoke and receive settled response.
 
 Artifact output:
 - `artifacts/pilot/<timestamp>/task-envelope.json`

@@ -73,6 +73,17 @@ Pilot runner (writes artifacts + verifies run):
 npm run pilot:openclaw
 ```
 
+Skill mode quick run (local KITE backend):
+
+```bash
+HOP_PILOT_MODE=skill
+HOP_PILOT_PAYER=<aa_wallet_address>
+HOP_PILOT_SESSION_ID=<optional_session_id>
+npm run pilot:openclaw
+```
+
+By default, skill mode auto-handles `402 payment_required` with `session pay -> proof submit`.
+
 Then implement your OpenClaw runtime against:
 - `createOpenClawAdapter().toTaskEnvelope(...)`
 - `createOpenClawAdapter().toTaskResult(...)`
