@@ -11,24 +11,6 @@ HopLedger is the AgentRail protocol layer for auditable agent-to-agent and agent
 - Protocol layer: AgentRail
 - Goal: verifiable execution with trace-linked payment and result evidence
 
-## Update Checklist
-When you ask to "update", we must check both documentation and knowledge sync in the same round.
-
-1. Notion sync check (required):
-- Knowledge Hub index freshness and links
-- HopLedger Plan status board
-- AA-v2 Knowledge impact notes (if session/pay/AA behavior changed)
-- Dev Log - Ongoing entry (date, commits, verification, blockers, next actions)
-
-2. README sync check (required):
-- New scripts/commands reflected in README
-- New runbooks/docs linked in README
-- Current validation commands and latest artifact path updated when relevant
-
-3. Output discipline (required):
-- Report what was updated in Notion and README
-- Report blockers explicitly when Notion write is unavailable
-
 ## Directory
 - `specs/` protocol and API contracts
 - `adapters/openclaw/` OpenClaw integration notes
@@ -83,7 +65,7 @@ Conformance gate:
 npm run conformance
 ```
 
-Digest parity check (KITE reference primitive):
+Digest parity check:
 
 ```bash
 npm run parity:kite
@@ -106,7 +88,7 @@ Pilot runner (writes artifacts + verifies run):
 npm run pilot:openclaw
 ```
 
-Skill mode quick run (local KITE backend):
+Skill mode quick run:
 
 ```bash
 HOP_PILOT_MODE=skill
@@ -134,7 +116,7 @@ curl -sS -X POST http://127.0.0.1:4411/verify/run \
   --data-binary @fixtures/contracts/run.fixture.json
 ```
 
-API smoke check (used by CI):
+API smoke check:
 
 ```bash
 npm run smoke:verify-api
@@ -180,7 +162,7 @@ const hooks: X402BindingHook[] = [
 ];
 
 const delivery = await sendEnvelopeWithHooks(transport, {
-  endpoint: "https://provider-agent.internal/agentrail",
+  endpoint: "https://your-agent-endpoint.example/agentrail",
   envelope: adapter.toTaskEnvelope(taskInput, taskContext),
   hooks
 });
