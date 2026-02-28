@@ -1,0 +1,43 @@
+{
+  "name": "task-result",
+  "envelope": {
+    "protocolVersion": "agentrail-v1",
+    "kind": "task-result",
+    "traceId": "trace_fixture_001",
+    "requestId": "x402_fixture_001",
+    "taskId": "task_fixture_001",
+    "fromAgentId": "openclaw-agent",
+    "toAgentId": "router-agent",
+    "channel": "dm",
+    "hopIndex": 2,
+    "conversationId": "conversation_fixture_001",
+    "messageId": "message_fixture_002",
+    "createdAt": "2026-02-28T00:00:02.000Z",
+    "status": "done",
+    "payload": {
+      "summary": "Risk score generated for BTCUSD.",
+      "data": {
+        "riskScore": 0.37,
+        "provider": "openclaw"
+      },
+      "error": ""
+    },
+    "payment": {
+      "mode": "x402",
+      "requestId": "x402_fixture_001",
+      "txHash": "0xfixturefeedbeef",
+      "block": 20260010,
+      "status": "success",
+      "explorer": "https://testnet.kitescan.ai/tx/0xfixturefeedbeef",
+      "verifiedAt": "2026-02-28T00:00:03.000Z"
+    },
+    "receiptRef": {
+      "requestId": "x402_fixture_001",
+      "txHash": "0xfixturefeedbeef",
+      "block": 20260010,
+      "status": "success",
+      "endpoint": "/api/receipt/x402_fixture_001"
+    }
+  },
+  "expectedDigest": "993f3bac17dc7c0a8de424335f9a69889998bacfcedd3f3c002788bf1faf61e0"
+}
