@@ -14,3 +14,12 @@ node dist/src/cli/verifier.js verify-envelope --file fixtures/contracts/task-env
 node dist/src/cli/verifier.js verify-envelope --file fixtures/contracts/task-result.fixture.json
 node dist/src/cli/verifier.js verify-run --file fixtures/contracts/run.fixture.json
 ```
+
+Conformance matrix:
+
+```bash
+npm run conformance
+```
+
+See:
+- `docs/conformance-acceptance.md`

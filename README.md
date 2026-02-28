@@ -16,6 +16,7 @@ HopLedger is the AgentRail protocol layer for auditable agent-to-agent and agent
 - `adapters/openclaw/` OpenClaw integration notes
 - `examples/` minimal runnable examples
 - `fixtures/` deterministic envelope/run fixtures
+- `docs/` conformance and pilot runbooks
 - `src/` typed SDK primitives for adapters and verification
 
 ## v0.2 Surface
@@ -54,6 +55,17 @@ Verifier quick check:
 node dist/src/cli/verifier.js verify-envelope --file fixtures/contracts/task-envelope.fixture.json
 node dist/src/cli/verifier.js verify-run --file fixtures/contracts/run.fixture.json
 ```
+
+Conformance gate:
+
+```bash
+npm run conformance
+```
+
+Runbooks:
+- `docs/conformance-acceptance.md`
+- `docs/openclaw-pilot-runbook.md`
+- `docs/rollback-sop.md`
 
 Then implement your OpenClaw runtime against:
 - `createOpenClawAdapter().toTaskEnvelope(...)`
