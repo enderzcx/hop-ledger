@@ -94,4 +94,5 @@ node dist/src/cli/verifier.js verify-run --file fixtures/contracts/run.fixture.j
 
 - Quickstart: `docs/openclaw-handoff-quickstart.md`
 - Skill-mode env template: `docs/openclaw-skill.env.example`
+- Blind handoff scorecard: `docs/openclaw-blind-handoff-scorecard.md`
 - Verifier API mode: `docs/verifier-api.md`

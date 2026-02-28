@@ -70,3 +70,8 @@ curl -sS -X POST http://127.0.0.1:4411/verify/run \
 - `verification.json` reports `runDigestMatch=true`.
 - If parity check is required against KITE primitive:
   - `npm run parity:kite -- --artifact artifacts/pilot/<timestamp>`
+
+## 8. Blind handoff scorecard
+
+For external-team acceptance tracking, fill:
+- `docs/openclaw-blind-handoff-scorecard.md`

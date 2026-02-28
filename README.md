@@ -74,9 +74,11 @@ npm run parity:kite
 Runbooks:
 - `docs/conformance-acceptance.md`
 - `docs/digest-parity-kite-reference.md`
+- `docs/verifier-api-deploy.md`
 - `docs/openclaw-pilot-runbook.md`
 - `docs/verifier-api.md`
 - `docs/openclaw-handoff-quickstart.md`
+- `docs/openclaw-blind-handoff-scorecard.md`
 - `docs/rollback-sop.md`
 
 Pilot runner (writes artifacts + verifies run):
@@ -111,6 +113,12 @@ curl -sS http://127.0.0.1:4411/health
 curl -sS -X POST http://127.0.0.1:4411/verify/run \
   -H "content-type: application/json" \
   --data-binary @fixtures/contracts/run.fixture.json
+```
+
+API smoke check (used by CI):
+
+```bash
+npm run smoke:verify-api
 ```
 
 Then implement your OpenClaw runtime against:
