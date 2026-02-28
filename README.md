@@ -62,8 +62,15 @@ Conformance gate:
 npm run conformance
 ```
 
+Digest parity check (KITE reference primitive):
+
+```bash
+npm run parity:kite
+```
+
 Runbooks:
 - `docs/conformance-acceptance.md`
+- `docs/digest-parity-kite-reference.md`
 - `docs/openclaw-pilot-runbook.md`
 - `docs/rollback-sop.md`
 

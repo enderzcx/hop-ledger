@@ -13,6 +13,7 @@
     "verify:run": "node dist/src/cli/verifier.js verify-run",
     "preconformance": "npm run build",
     "conformance": "node scripts/conformance-check.mjs",
+    "parity:kite": "node scripts/digest-parity-kite.mjs",
     "pilot:openclaw": "npm run build && node scripts/openclaw-pilot-run.mjs"
   },
   "devDependencies": {
